@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sync-Status</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #18181b;
+      --surface: #27272a;
+      --border: #3f3f46;
+      --text: #fafafa;
+      --text-soft: #a1a1aa;
+      --accent: #60a5fa;
+      --ok: #4ade80;
+      --warn: #fbbf24;
+      --err: #f87171;
+      --font: "DM Sans", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      padding: 2rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.ok    { background: var(--ok); }
+    .status-dot.warn  { background: var(--warn); }
+    .status-dot.error { background: var(--err); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h2 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-soft);
+      margin-bottom: 0.75rem;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .stat-value {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .json-preview {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      color: var(--text-soft);
+      max-height: 300px;
+    }
+
+    .refresh-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <span class="status-dot" id="dot"></span>
+    Sync-Status
+  </h1>
+
+  <div class="card">
+    <h2>Letzter Sync</h2>
+    <div class="stat-grid">
+      <div>
+        <div class="stat-label">Zeitpunkt</div>
+        <div class="stat-value" id="timestamp">–</div>
+      </div>
+      <div>
+        <div class="stat-label">Dauer</div>
+        <div class="stat-value" id="duration">–</div>
+      </div>
+      <div>
+        <div class="stat-label">Sync #</div>
+        <div class="stat-value" id="syncNumber">–</div>
+      </div>
+      <div>
+        <div class="stat-label">Intervall</div>
+        <div class="stat-value" id="interval">–</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Datenumfang</h2>
+    <div class="stat-grid">
+      <div>
+        <div class="stat-label">Rennen</div>
+        <div class="stat-value" id="races">–</div>
+      </div>
+      <div>
+        <div class="stat-label">Meldungen</div>
+        <div class="stat-value" id="entries">–</div>
+      </div>
+      <div>
+        <div class="stat-label">Ergebnisse</div>
+        <div class="stat-value" id="results">–</div>
+      </div>
+      <div>
+        <div class="stat-label">Status</div>
+        <div class="stat-value" id="state">–</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Rohdaten (status.json)</h2>
+    <pre class="json-preview" id="raw">Lade…</pre>
+  </div>
+
+  <p class="refresh-note">Aktualisiert alle 10 Sekunden</p>
+
+  <script>
+    async function refresh() {
+      try {
+        const res = await fetch("../data/status.json?t=" + Date.now());
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const s = await res.json();
+
+        const dot = document.getElementById("dot");
+        dot.className = "status-dot " + (s.state || "warn");
+
+        const ts = s.timestamp ? new Date(s.timestamp).toLocaleString("de-DE") : "–";
+        document.getElementById("timestamp").textContent = ts;
+        document.getElementById("duration").textContent = s.durationMs ? s.durationMs + " ms" : "–";
+        document.getElementById("syncNumber").textContent = s.syncNumber ?? "–";
+        document.getElementById("interval").textContent = s.intervalSeconds ? s.intervalSeconds + " s" : "–";
+        document.getElementById("races").textContent = s.raceCount ?? "–";
+        document.getElementById("entries").textContent = s.entryCount ?? "–";
+        document.getElementById("results").textContent = s.resultCount ?? "–";
+        document.getElementById("state").textContent = s.state ?? "–";
+
+        document.getElementById("raw").textContent = JSON.stringify(s, null, 2);
+      } catch (e) {
+        document.getElementById("dot").className = "status-dot error";
+        document.getElementById("raw").textContent = "Fehler: " + e.message;
+      }
+    }
+
+    refresh();
+    setInterval(refresh, 10_000);
+  </script>
+</body>
+</html>

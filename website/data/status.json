@@ -1,0 +1,12 @@
+{
+  "state": "ok",
+  "message": null,
+  "syncNumber": 42,
+  "timestamp": "2026-06-13T08:55:00Z",
+  "startedAt": "2026-06-13T08:54:58Z",
+  "intervalSeconds": 60,
+  "durationMs": 1830,
+  "raceCount": 3,
+  "entryCount": 9,
+  "resultCount": 3
+}

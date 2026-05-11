@@ -1,0 +1,191 @@
+{
+  "event": {
+    "id": 1,
+    "title": "42. Musterstadt-Regatta",
+    "startDate": "2026-06-13T00:00:00Z",
+    "endDate": "2026-06-14T00:00:00Z",
+    "location": "Musterstadt"
+  },
+  "races": [
+    {
+      "id": 1,
+      "number": "1",
+      "shortLabel": "JM 1x A",
+      "longLabel": "A-Junioren-Einer",
+      "distance": 1000,
+      "isLightweight": false,
+      "comment": null,
+      "entryCount": 3,
+      "entries": [
+        {
+          "id": 101,
+          "bowNumber": 1,
+          "boatLabel": "RC Musterstadt",
+          "isCancelled": false,
+          "club": { "id": 10, "short": "RCM", "name": "Ruderclub Musterstadt" },
+          "athletes": [
+            { "firstName": "Max", "lastName": "Mustermann", "isCox": false }
+          ]
+        },
+        {
+          "id": 102,
+          "bowNumber": 2,
+          "boatLabel": "RV Beispielburg",
+          "isCancelled": false,
+          "club": { "id": 11, "short": "RVB", "name": "Ruderverein Beispielburg" },
+          "athletes": [
+            { "firstName": "Tim", "lastName": "Tester", "isCox": false }
+          ]
+        },
+        {
+          "id": 103,
+          "bowNumber": 3,
+          "boatLabel": "RG Testdorf",
+          "isCancelled": false,
+          "club": { "id": 12, "short": "RGT", "name": "Rudergemeinschaft Testdorf" },
+          "athletes": [
+            { "firstName": "Jan", "lastName": "Janssen", "isCox": false }
+          ]
+        }
+      ],
+      "competitions": [
+        {
+          "id": 1001,
+          "round": 1,
+          "roundCode": "A",
+          "heatNumber": 1,
+          "scheduledStart": "2026-06-13T09:00:00Z",
+          "actualStart": "2026-06-13T09:01:12Z",
+          "status": "finished",
+          "hasResults": true,
+          "boats": [
+            { "entryId": 102, "lane": 1, "rank": 1, "finalTimeMs": 212340, "deltaMs": 0 },
+            { "entryId": 101, "lane": 2, "rank": 2, "finalTimeMs": 215780, "deltaMs": 3440 },
+            { "entryId": 103, "lane": 3, "rank": 3, "finalTimeMs": 220110, "deltaMs": 7770 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "number": "2",
+      "shortLabel": "JF 2x",
+      "longLabel": "Juniorinnen-Doppelzweier",
+      "distance": 1000,
+      "isLightweight": false,
+      "comment": null,
+      "entryCount": 4,
+      "entries": [
+        {
+          "id": 201,
+          "bowNumber": 1,
+          "boatLabel": "RC Musterstadt",
+          "isCancelled": false,
+          "club": { "id": 10, "short": "RCM", "name": "Ruderclub Musterstadt" },
+          "athletes": [
+            { "firstName": "Anna", "lastName": "Ahrens", "isCox": false },
+            { "firstName": "Lisa", "lastName": "Ludwig", "isCox": false }
+          ]
+        },
+        {
+          "id": 202,
+          "bowNumber": 2,
+          "boatLabel": "RV Beispielburg",
+          "isCancelled": false,
+          "club": { "id": 11, "short": "RVB", "name": "Ruderverein Beispielburg" },
+          "athletes": [
+            { "firstName": "Sarah", "lastName": "Schmidt", "isCox": false },
+            { "firstName": "Nina", "lastName": "Neumann", "isCox": false }
+          ]
+        },
+        {
+          "id": 203,
+          "bowNumber": 3,
+          "boatLabel": "RG Testdorf",
+          "isCancelled": true,
+          "club": { "id": 12, "short": "RGT", "name": "Rudergemeinschaft Testdorf" },
+          "athletes": [
+            { "firstName": "Katja", "lastName": "Klein", "isCox": false },
+            { "firstName": "Mona", "lastName": "Müller", "isCox": false }
+          ]
+        },
+        {
+          "id": 204,
+          "bowNumber": 4,
+          "boatLabel": "RC Flussdorf",
+          "isCancelled": false,
+          "club": { "id": 13, "short": "RCF", "name": "Ruderclub Flussdorf" },
+          "athletes": [
+            { "firstName": "Eva", "lastName": "Ernst", "isCox": false },
+            { "firstName": "Lena", "lastName": "Lange", "isCox": false }
+          ]
+        }
+      ],
+      "competitions": [
+        {
+          "id": 2001,
+          "round": 1,
+          "roundCode": "A",
+          "heatNumber": 1,
+          "scheduledStart": "2026-06-13T09:10:00Z",
+          "actualStart": null,
+          "status": "scheduled",
+          "hasResults": false,
+          "boats": [
+            { "entryId": 201, "lane": 1, "rank": null, "finalTimeMs": null, "deltaMs": null },
+            { "entryId": 202, "lane": 2, "rank": null, "finalTimeMs": null, "deltaMs": null },
+            { "entryId": 204, "lane": 3, "rank": null, "finalTimeMs": null, "deltaMs": null }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "number": "3",
+      "shortLabel": "SM 4x+",
+      "longLabel": "Männer-Doppelvierer mit Steuermann",
+      "distance": 1000,
+      "isLightweight": false,
+      "comment": "Pokalrennen",
+      "entryCount": 2,
+      "entries": [
+        {
+          "id": 301,
+          "bowNumber": 1,
+          "boatLabel": "RC Musterstadt",
+          "isCancelled": false,
+          "club": { "id": 10, "short": "RCM", "name": "Ruderclub Musterstadt" },
+          "athletes": [
+            { "firstName": "Paul", "lastName": "Peters", "isCox": false },
+            { "firstName": "Kai", "lastName": "Krause", "isCox": false },
+            { "firstName": "Sven", "lastName": "Schulz", "isCox": false },
+            { "firstName": "Felix", "lastName": "Fischer", "isCox": false },
+            { "firstName": "Tom", "lastName": "Thiel", "isCox": true }
+          ]
+        },
+        {
+          "id": 302,
+          "bowNumber": 2,
+          "boatLabel": "RV Beispielburg",
+          "isCancelled": false,
+          "club": { "id": 11, "short": "RVB", "name": "Ruderverein Beispielburg" },
+          "athletes": [
+            { "firstName": "Mark", "lastName": "Meyer", "isCox": false },
+            { "firstName": "Lars", "lastName": "Lehmann", "isCox": false },
+            { "firstName": "Dirk", "lastName": "Dahl", "isCox": false },
+            { "firstName": "Uwe", "lastName": "Urban", "isCox": false },
+            { "firstName": "Ole", "lastName": "Otto", "isCox": true }
+          ]
+        }
+      ],
+      "competitions": []
+    }
+  ],
+  "clubs": [
+    { "id": 13, "short": "RCF", "name": "Ruderclub Flussdorf" },
+    { "id": 10, "short": "RCM", "name": "Ruderclub Musterstadt" },
+    { "id": 12, "short": "RGT", "name": "Rudergemeinschaft Testdorf" },
+    { "id": 11, "short": "RVB", "name": "Ruderverein Beispielburg" }
+  ],
+  "lastSync": "2026-06-13T08:55:00Z"
+}

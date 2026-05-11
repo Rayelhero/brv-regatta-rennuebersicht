@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRV: Live-Ergebnisse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- ── Header ──────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-title">
+        <img
+          src="https://breisacher-ruderverein.de/wp-content/uploads/2020/04/logo300_red.png"
+          alt="Breisacher Ruderverein"
+          class="logo"
+          height="40"
+        >
+        <div>
+          <h1 id="event-title">Regatta</h1>
+          <p id="event-meta" class="header-meta"></p>
+        </div>
+      </div>
+      <div class="sync-badge" id="sync-badge" title="Letzter Sync">
+        <span class="sync-dot"></span>
+        <span id="sync-time">–</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Toolbar ─────────────────────────────────────────── -->
+  <nav class="toolbar" role="search">
+    <div class="toolbar-inner">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="6" stroke="currentColor" stroke-width="1.8" fill="none"/>
+          <line x1="13" y1="13" x2="18" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <input
+          type="search"
+          id="search-input"
+          placeholder="Rennen, Verein oder Startnummer suchen…"
+          autocomplete="off"
+        >
+        <kbd class="search-hint" id="search-hint">/</kbd>
+      </div>
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">Alle</button>
+        <button class="filter-btn" data-filter="scheduled">Geplant</button>
+        <button class="filter-btn" data-filter="running">Laufend</button>
+        <button class="filter-btn" data-filter="finished">Beendet</button>
+      </div>
+    </div>
+    <!-- Tag-Filter (nur sichtbar wenn Regatta > 1 Tag) -->
+    <div class="toolbar-inner day-toolbar" id="day-filter-group" hidden></div>
+  </nav>
+
+  <!-- ── Hauptinhalt ─────────────────────────────────────── -->
+  <main class="content">
+    <div id="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Lade Regattadaten…</p>
+    </div>
+    <div id="error" class="error-state" hidden>
+      <p id="error-message">Daten konnten nicht geladen werden.</p>
+      <button onclick="location.reload()">Erneut versuchen</button>
+    </div>
+    <div id="empty" class="empty-state" hidden>
+      <p>Keine Rennen gefunden.</p>
+    </div>
+    <div id="race-list" class="race-list" hidden></div>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+
+    <footer class="site-footer">
+      <a href="https://breisacher-ruderverein.de/impressum/" target="_blank" rel="noopener">Impressum</a>
+      ·
+      <a href="https://breisacher-ruderverein.de/datenschutzerklaerung/" target="_blank" rel="noopener">Datenschutz</a>
+      ·
+      <a href="https://breisacher-ruderverein.de/ueber-uns/kontakt/" target="_blank" rel="noopener">Kontakt</a>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+
+</html>

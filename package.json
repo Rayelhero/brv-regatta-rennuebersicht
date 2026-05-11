@@ -1,0 +1,20 @@
+{
+  "name": "aquarius-web",
+  "version": "1.0.0",
+  "description": "Öffentliche Regatta-Ergebnisseite für Aquarius",
+  "type": "module",
+  "scripts": {
+    "sync": "node sync/index.js",
+    "sync:once": "node sync/index.js --once",
+    "deploy": "node infra/deploy.js",
+    "dev": "npx serve website -l 3000"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.600.0",
+    "mssql": "^11.0.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
