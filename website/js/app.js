@@ -97,24 +97,33 @@ function setupSearch() {
 }
 
 function setupFilters() {
+  // Status-Filter (Alle, Geplant, Laufend, Beendet)
   document.querySelectorAll(".filter-btn[data-filter]").forEach((btn) => {
     btn.addEventListener("click", () =>
-      applyFilters(getState().searchQuery, btn.dataset.filter, getState().activeDay)
+    applyFilters(getState().searchQuery, btn.dataset.filter, getState().activeDay)
+    );
+  });
+
+  // Sortierung (Nr., Zeit)
+  document.querySelectorAll(".sort-btn").forEach((btn) => {
+    btn.addEventListener("click", () =>
+    applyFilters(
+      getState().searchQuery,
+                 getState().activeFilter,
+                 getState().activeDay,
+                 btn.dataset.sort
+    )
     );
   });
 }
-
-function applyFilters(query, filter, activeDay = "all") {
+function applyFilters(query, filter, activeDay = "all", activeSort = getState().activeSort) {
   const state = getState();
   if (!state.regatta) return;
 
-  const visibleRaces = filterRaces(state.regatta.races || [], query, filter, activeDay);
-  update({ searchQuery: query, activeFilter: filter, activeDay, visibleRaces });
-
-  // Tag-Buttons aktiven Zustand aktualisieren
-  document.querySelectorAll("#day-filter-group .filter-btn").forEach((btn) => {
-    btn.classList.toggle("active", btn.textContent === getDayBtnLabel(activeDay, state.regatta.races || []));
-  });
+  const visibleRaces = filterRaces(
+    state.regatta.races || [], query, filter, activeDay, activeSort
+  );
+  update({ searchQuery: query, activeFilter: filter, activeDay, activeSort, visibleRaces });
   renderDayButtons(state.regatta.races || []);
 }
 

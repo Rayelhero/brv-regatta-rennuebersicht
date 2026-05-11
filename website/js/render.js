@@ -58,6 +58,9 @@ function renderFilters(state) {
   document.querySelectorAll(".filter-btn[data-filter]").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.filter === state.activeFilter);
   });
+  document.querySelectorAll('.sort-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.sort === state.activeSort);
+  });
 }
 
 // ── Race List ─────────────────────────────────────────────────

@@ -42,7 +42,7 @@ export function getRegattaDays(races) {
 /**
  * Filtert und durchsucht die Rennliste.
  */
-export function filterRaces(races, query, filter, activeDay = "all") {
+export function filterRaces(races, query, filter, activeDay = "all", activeSort = "number") {
   let result = races;
 
   result = result.filter((race) =>
@@ -64,6 +64,21 @@ export function filterRaces(races, query, filter, activeDay = "all") {
   if (query.trim()) {
     const terms = normalizeQuery(query);
     result = result.filter((race) => matchesRace(race, terms));
+  }
+
+  if (activeSort === 'time') {
+    result = [...result].sort((a, b) => {
+      const ta = firstCompStart(a) || 'zzz';
+      const tb = firstCompStart(b) || 'zzz';
+      return ta.localeCompare(tb);
+    });
+  } else {
+    // Nach Rennnummer — führende Zahl numerisch, Rest alphabetisch
+    result = [...result].sort((a, b) => {
+      const na = parseFloat(a.number) || 0;
+      const nb = parseFloat(b.number) || 0;
+      return na !== nb ? na - nb : String(a.number).localeCompare(String(b.number));
+    });
   }
 
   return result;

@@ -464,6 +464,13 @@ a:hover { text-decoration: underline; }
   border-top: 1px solid var(--color-border);
 }
 
+.sort-group {
+  display: flex;
+  gap: 0.375rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--color-border);
+}
+
 /* ── Search highlight ──────────────────────────────────────── */
 mark {
   background: var(--color-accent-bg);
