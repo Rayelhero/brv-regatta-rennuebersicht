@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WKR Start — Regatta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../wkr.css">
+</head>
+<body>
+<div class="app">
+  <nav class="toolbar">
+    <a class="back-link" href="../">← WKR</a>
+    <span class="toolbar-title">Start</span>
+    <button class="btn" id="btn-prev">← Zurück</button>
+    <span class="kbd">←</span>
+    <button class="btn" id="btn-current">⏱ Aktuell</button>
+    <span class="kbd">C</span>
+    <button class="btn" id="btn-auto">▶ Auto</button>
+    <span class="kbd">A</span>
+    <button class="btn" id="btn-next">Weiter →</button>
+    <span class="kbd">→</span>
+    <span class="index-hint" id="index-hint"></span>
+    <span class="spacer"></span>
+    <span class="sync-dot" id="sync-dot"></span>
+    <span class="sync-label" id="sync-label">–</span>
+  </nav>
+  <div class="scroll-container" id="scroll-container">
+    <div class="center-msg">Lade Daten…</div>
+  </div>
+</div>
+<script>
+  const WKR_DATA_URL = '../../data/regatta.json';
+  const WKR_MODE     = 'start';
+</script>
+<script src="../wkr.js"></script>
+</body>
+</html>

@@ -3,669 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wettkampfrichter</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>WKR — Regatta</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:        #f1f5f9;
-      --bg-panel:  #ffffff;
-      --bg-nav:    #1a2236;
-      --text:      #111827;
-      --text-soft: #6b7280;
-      --border:    #e2e8f0;
-      --accent:    #1d6fa5;
-      --success:   #2d8a56;
-      --warning:   #d97706;
-      --mono:      'JetBrains Mono', monospace;
-    }
-
-    html, body { height: 100%; }
-
     body {
       font-family: 'DM Sans', -apple-system, sans-serif;
-      background: var(--bg);
+      background: #1a2236;
+      color: #fff;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ── Toolbar ─────────────────────────────────────── */
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1rem;
-      background: var(--bg-nav);
-      color: #fff;
-      flex-shrink: 0;
-      flex-wrap: wrap;
-    }
-
-    .toolbar-title {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: rgba(255,255,255,.45);
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      margin-right: .25rem;
-      white-space: nowrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: .35rem;
-      padding: .45rem .9rem;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.07);
-      color: #fff;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: .875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background .12s;
-      white-space: nowrap;
-      user-select: none;
-    }
-    .btn:hover:not(:disabled) { background: rgba(255,255,255,.14); }
-    .btn:disabled { opacity: .32; cursor: not-allowed; }
-    .btn.active   { background: var(--accent); border-color: var(--accent); }
-
-    .spacer { flex: 1; }
-
-    .index-hint {
-      font-size: .78rem;
-      color: rgba(255,255,255,.35);
-      min-width: 4rem;
-      text-align: center;
-    }
-
-    .sync-row {
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-    }
-    .sync-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--success);
-      flex-shrink: 0;
-    }
-    .sync-dot.stale { background: var(--warning); }
-    .sync-label { font-size: .75rem; color: rgba(255,255,255,.4); }
-
-    .kbd {
-      font-size: .65rem;
-      color: rgba(255,255,255,.28);
-      border: 1px solid rgba(255,255,255,.15);
-      border-radius: 3px;
-      padding: 0 .25rem;
-      font-family: var(--mono);
-    }
-
-    /* ── Panels ──────────────────────────────────────── */
-    .panels {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    .panel {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem 1.75rem;
-      background: var(--bg-panel);
-    }
-
-    .panel:first-child {
-      border-right: 3px solid var(--border);
-    }
-
-    .panel-empty {
-      display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text-soft);
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .title {
       font-size: 1rem;
-      height: 100%;
+      font-weight: 500;
+      color: rgba(255,255,255,.4);
+      text-transform: uppercase;
+      letter-spacing: .1em;
     }
 
-    /* ── Race Header ─────────────────────────────────── */
-    .race-top {
+    .cards {
       display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--border);
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    .race-num-badge {
-      width: 3rem; height: 3rem;
-      background: var(--accent);
-      color: #fff;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 1.25rem;
+    a.card {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .race-info-col { flex: 1; min-width: 0; }
-
-    .race-name {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.15;
-      margin-bottom: .4rem;
-    }
-
-    .race-meta {
-      display: flex;
-      align-items: center;
       gap: .75rem;
-      flex-wrap: wrap;
-      font-size: .9rem;
-      color: var(--text-soft);
-    }
-
-    .race-clock {
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--text);
-    }
-
-    .status-pill {
-      padding: .18rem .65rem;
-      border-radius: 999px;
-      font-size: .72rem;
-      font-weight: 700;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-    }
-    .status-pill.scheduled { background: #f1f5f9; color: #64748b; }
-    .status-pill.running   { background: #fef3c7; color: #b45309; }
-    .status-pill.finished  { background: #dcfce7; color: #15803d; }
-    .status-pill.im_ziel { background: #ede9fe; color: #6d28d9; }
-
-    /* ── Comp block ──────────────────────────────────── */
-    .comp-heading {
-      font-size: .72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      color: var(--text-soft);
-      margin: 1.25rem 0 .5rem;
-    }
-
-    .comp-heading:first-child { margin-top: 0; }
-
-    /* ── Boat Table ──────────────────────────────────── */
-    .boat-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .92rem;
-    }
-
-    .boat-table th {
-      text-align: left;
-      font-size: .68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      color: var(--text-soft);
-      padding: .4rem .6rem;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .boat-table td {
-      padding: .55rem .6rem;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-
-    .boat-table tr:last-child td { border-bottom: none; }
-
-    .col-narrow { width: 3rem; }
-    .col-rank   { width: 2.5rem; }
-    .col-time   { width: 5.5rem; text-align: right; }
-    .col-delta  { width: 4.5rem; text-align: right; }
-
-    .club-strong { font-weight: 600; }
-    .club-abbr   { color: var(--text-soft); font-size: .85rem; }
-
-    .athlete-line {
-      display: block;
-      font-size: .83rem;
-      color: var(--text-soft);
-      line-height: 1.55;
-    }
-    .athlete-cox { color: var(--accent); }
-
-    .rank-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 1.6rem; height: 1.6rem;
-      border-radius: 50%;
-      font-weight: 700;
-      font-size: .8rem;
+      width: 200px;
+      padding: 2rem 1.5rem;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 16px;
+      text-decoration: none;
       color: #fff;
-    }
-    .rank-1 { background: #c8932a; }
-    .rank-2 { background: #9ca3af; }
-    .rank-3 { background: #b87333; }
-
-    .mono { font-family: var(--mono); }
-
-    .no-entries {
-      padding: .75rem 0;
-      color: var(--text-soft);
-      font-style: italic;
-      font-size: .9rem;
+      transition: background .15s, transform .12s;
     }
 
-    /* ── Loading overlay ─────────────────────────────── */
-    #loading-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(255,255,255,.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      color: var(--text-soft);
-      z-index: 10;
+    a.card:hover {
+      background: rgba(255,255,255,.13);
+      transform: translateY(-2px);
     }
 
-    /* ── Mobile ──────────────────────────────────────── */
-    @media (max-width: 720px) {
-      body { overflow-y: auto; height: auto; }
-      .panels {
-        flex-direction: column;
-        overflow: visible;
-        height: auto;
-      }
-      .panel {
-        overflow-y: visible;
-        border-right: none !important;
-        border-bottom: 3px solid var(--border);
-        padding: 1rem;
-      }
-      .race-name { font-size: 1.25rem; }
-      .toolbar-title, .kbd { display: none; }
+    .card-icon { font-size: 2.5rem; }
+    .card-label { font-size: 1.25rem; font-weight: 700; }
+    .card-desc {
+      font-size: .8rem;
+      color: rgba(255,255,255,.45);
+      text-align: center;
+      line-height: 1.4;
     }
   </style>
 </head>
 <body>
-
-<nav class="toolbar">
-  <span class="toolbar-title">Wettkampfrichter</span>
-
-  <button class="btn" id="btn-prev">← Zurück</button>
-  <span class="kbd" style="margin-left:-.25rem">←</span>
-
-  <button class="btn" id="btn-current" title="Zum nächsten ungeplanten Rennen springen">⏱ Aktuell</button>
-  <span class="kbd" style="margin-left:-.25rem">C</span>
-
-  <button class="btn" id="btn-auto">▶ Auto</button>
-  <span class="kbd" style="margin-left:-.25rem">A</span>
-
-  <button class="btn" id="btn-next">Weiter →</button>
-  <span class="kbd" style="margin-left:-.25rem">→</span>
-
-  <span class="index-hint" id="index-hint"></span>
-
-  <span class="spacer"></span>
-
-  <div class="sync-row">
-    <span class="sync-dot" id="sync-dot"></span>
-    <span class="sync-label" id="sync-label">–</span>
+  <p class="title">Wettkampfrichter</p>
+  <div class="cards">
+    <a class="card" href="start/">
+      <span class="card-icon">🚣</span>
+      <span class="card-label">Start</span>
+      <span class="card-desc">Nächstes und übernächstes ungeplantes Rennen</span>
+    </a>
+    <a class="card" href="ziel/">
+      <span class="card-icon">🏁</span>
+      <span class="card-label">Ziel</span>
+      <span class="card-desc">Letztes gestartetes und nächstes ungeplantes Rennen</span>
+    </a>
   </div>
-</nav>
-
-<div class="panels" id="panels" style="position:relative">
-  <div id="loading-overlay">Lade Daten…</div>
-</div>
-
-<script>
-// ── State ───────────────────────────────────────────────────────────
-
-let regatta     = null;
-let races       = [];   // sorted, time-filtered
-let idx         = 0;    // left panel index
-let autoMode    = false;
-
-// ── Init ────────────────────────────────────────────────────────────
-
-loadHash();
-loadData();
-setInterval(loadData, 10_000);
-
-document.getElementById('btn-prev').addEventListener('click', () => navigate(-1));
-document.getElementById('btn-next').addEventListener('click', () => navigate(+1));
-document.getElementById('btn-current').addEventListener('click', jumpToCurrent);
-document.getElementById('btn-auto').addEventListener('click', toggleAuto);
-
-document.addEventListener('keydown', e => {
-  if (['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
-  if (e.key === 'ArrowLeft')           navigate(-1);
-  if (e.key === 'ArrowRight')          navigate(+1);
-  if (e.key === 'a' || e.key === 'A')  toggleAuto();
-  if (e.key === 'c' || e.key === 'C')  jumpToCurrent();
-});
-
-// ── Data ────────────────────────────────────────────────────────────
-
-async function loadData() {
-  try {
-    const res = await fetch('../data/regatta.json?t=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    regatta = await res.json();
-
-    races = (regatta.races || [])
-      .filter(r => (r.competitions || []).some(c => c.scheduledStart))
-      .sort((a, b) => (firstStart(a) || '').localeCompare(firstStart(b) || ''));
-
-    if (autoMode) idx = nextUnstartedIdx();
-    clamp();
-    render();
-    updateSync(true);
-  } catch (err) {
-    console.error('[judge]', err);
-    updateSync(false);
-  }
-}
-
-// ── Navigation ──────────────────────────────────────────────────────
-
-function navigate(delta) {
-  setAuto(false);
-  idx = Math.max(0, Math.min(races.length - 1, idx + delta));
-  saveHash();
-  render();
-}
-
-function jumpToCurrent() {
-  setAuto(false);
-  idx = nextUnstartedIdx();
-  saveHash();
-  render();
-}
-
-function toggleAuto() {
-  setAuto(!autoMode);
-  if (autoMode) idx = nextUnstartedIdx();
-  saveHash();
-  render();
-}
-
-function setAuto(val) {
-  autoMode = val;
-  const btn = document.getElementById('btn-auto');
-  btn.classList.toggle('active', autoMode);
-  btn.textContent = autoMode ? '⏸ Auto' : '▶ Auto';
-}
-
-// ── Logic ───────────────────────────────────────────────────────────
-
-function nextUnstartedIdx() {
-  for (let i = 0; i < races.length; i++) {
-    const comps = races[i].competitions || [];
-    if (comps.length && comps.every(c => c.status <= 1)) return i;
-  }
-  return Math.max(0, races.length - 1);
-}
-
-function raceStatus(race) {
-  const comps = race.competitions || [];
-  if (!comps.length) return 'scheduled';
-  if (comps.every(c => c.status === 4))                  return 'finished';
-  if (comps.some(c => c.status === 2))                   return 'running';
-  if (comps.some(c => c.status === 3 || c.status === 5)) return 'im_ziel';
-  return 'scheduled';
-}
-
-function firstStart(race) {
-  for (const c of race.competitions || [])
-    if (c.scheduledStart) return c.scheduledStart;
-  return null;
-}
-
-function clamp() {
-  idx = Math.max(0, Math.min(Math.max(0, races.length - 1), idx));
-}
-
-// ── Render ──────────────────────────────────────────────────────────
-
-function render() {
-  const container = document.getElementById('panels');
-
-  // Remove loading overlay on first render
-  const overlay = document.getElementById('loading-overlay');
-  if (overlay) overlay.remove();
-
-  document.getElementById('btn-prev').disabled = idx <= 0 || autoMode;
-  document.getElementById('btn-next').disabled = idx >= races.length - 1 || autoMode;
-  document.getElementById('index-hint').textContent =
-    races.length ? `${idx + 1} / ${races.length}` : '';
-
-  container.innerHTML = '';
-  container.appendChild(buildPanel(races[idx]     ?? null, false));
-  container.appendChild(buildPanel(races[idx + 1] ?? null, true));
-}
-
-// ── Panel ───────────────────────────────────────────────────────────
-
-function buildPanel(race, isRight) {
-  const panel = div('panel');
-
-  if (!race) {
-    const empty = div('panel-empty');
-    empty.textContent = isRight ? 'Kein weiteres Rennen' : 'Keine Rennen';
-    panel.appendChild(empty);
-    return panel;
-  }
-
-  const entryMap = new Map((race.entries || []).map(e => [e.id, e]));
-  const status   = raceStatus(race);
-  const labels = {
-    scheduled: 'Geplant',
-    running:   'Laufend',
-    im_ziel:   'Im Ziel',
-    finished:  'Offiziell'
-    };
-  // ── Header ──
-  const top = div('race-top');
-  top.innerHTML = `
-    <div class="race-num-badge">${esc(String(race.number))}</div>
-    <div class="race-info-col">
-      <div class="race-name">${esc(race.shortLabel || race.longLabel || '–')}</div>
-      <div class="race-meta">
-        ${firstStart(race) ? `<span class="race-clock">${fmtClock(firstStart(race))}</span>` : ''}
-        <span>${race.distance || '–'} m</span>
-        <span>${race.entryCount} Boote</span>
-        <span class="status-pill ${status}">${labels[status]}</span>
-      </div>
-    </div>`;
-  panel.appendChild(top);
-
-  // ── Comps ──
-  const comps = race.competitions || [];
-  if (!comps.length) {
-    const p = div('no-entries');
-    p.textContent = 'Noch keine Einteilungen vorhanden.';
-    panel.appendChild(p);
-    return panel;
-  }
-
-  const showHeadings = comps.length > 1;
-
-  for (const comp of comps) {
-    if (showHeadings) {
-      const h = div('comp-heading');
-      const t = fmtClock(comp.scheduledStart);
-      h.textContent = 'Abteilung' + (t ? ' · ' + t : '');
-      panel.appendChild(h);
-    }
-    panel.appendChild(buildBoatTable(comp, entryMap));
-  }
-
-  return panel;
-}
-
-// ── Boat Table ──────────────────────────────────────────────────────
-
-function buildBoatTable(comp, entryMap) {
-  const hasResults = !!comp.hasResults;
-  const boats = comp.boats || [];
-
-  const table = document.createElement('table');
-  table.className = 'boat-table';
-
-  const thead = document.createElement('thead');
-  thead.innerHTML = hasResults
-    ? `<tr>
-         <th class="col-rank">Pl.</th>
-         <th class="col-narrow">Bahn</th>
-         <th class="col-narrow">SN</th>
-         <th>Boot</th>
-         <th class="col-time">Zeit</th>
-         <th class="col-delta">Δ</th>
-       </tr>`
-    : `<tr>
-         <th class="col-narrow">Bahn</th>
-         <th class="col-narrow">SN</th>
-         <th>Boot</th>
-       </tr>`;
-  table.appendChild(thead);
-
-  const tbody = document.createElement('tbody');
-
-  for (const boat of boats) {
-    const entry = entryMap.get(boat.entryId);
-    const tr    = document.createElement('tr');
-
-    const clubHtml = entry
-      ? `<span class="club-strong">${esc(entry.boatLabel || entry.club?.name || '–')}</span>
-         ${entry.club?.short ? `<span class="club-abbr"> (${esc(entry.club.short)})</span>` : ''}`
-      : '–';
-
-    const athleteHtml = (entry?.athletes || []).map(a => {
-      const name = esc(`${a.firstName} ${a.lastName}`);
-      return `<span class="athlete-line ${a.isCox ? 'athlete-cox' : ''}">${name}${a.isCox ? ' <em style="font-style:normal;font-size:.75rem">(St.)</em>' : ''}</span>`;
-    }).join('');
-
-    if (hasResults) {
-      tr.innerHTML = `
-        <td>${rankBadge(boat.rank)}</td>
-        <td>${boat.lane ?? '–'}</td>
-        <td>${entry?.bowNumber ?? '–'}</td>
-        <td>${clubHtml}${athleteHtml}</td>
-        <td class="col-time mono">${fmtTime(boat.finalTimeMs)}</td>
-        <td class="col-delta mono" style="color:var(--text-soft)">${fmtDelta(boat.deltaMs)}</td>`;
-    } else {
-      tr.innerHTML = `
-        <td>${boat.lane ?? '–'}</td>
-        <td>${entry?.bowNumber ?? '–'}</td>
-        <td>${clubHtml}${athleteHtml}</td>`;
-    }
-
-    tbody.appendChild(tr);
-  }
-
-  table.appendChild(tbody);
-  return table;
-}
-
-// ── Sync ────────────────────────────────────────────────────────────
-
-function updateSync(ok) {
-  const dot   = document.getElementById('sync-dot');
-  const label = document.getElementById('sync-label');
-
-  if (!ok) {
-    dot.className = 'sync-dot stale';
-    label.textContent = 'Fehler';
-    return;
-  }
-
-  const ts   = regatta?.lastSync;
-  const mins = ts ? Math.floor((Date.now() - new Date(ts).getTime()) / 60_000) : null;
-  const stale = mins === null || mins > 3;
-
-  dot.className = 'sync-dot' + (stale ? ' stale' : '');
-  label.textContent = mins === null ? '–' : mins === 0 ? 'gerade eben' : `vor ${mins} min`;
-}
-
-// ── Hash ────────────────────────────────────────────────────────────
-
-function saveHash() {
-  history.replaceState(null, '', '#' + (autoMode ? 'auto' : idx));
-}
-
-function loadHash() {
-  const h = location.hash.replace('#', '');
-  if (h === 'auto') {
-    setAuto(true);
-  } else if (/^\d+$/.test(h)) {
-    idx = parseInt(h, 10);
-  }
-}
-
-// ── Utils ───────────────────────────────────────────────────────────
-
-function div(cls) {
-  const el = document.createElement('div');
-  if (cls) el.className = cls;
-  return el;
-}
-
-function esc(s) {
-  return String(s ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function rankBadge(rank) {
-  if (rank == null) return '–';
-  if (rank <= 3) return `<span class="rank-badge rank-${rank}">${rank}</span>`;
-  return String(rank);
-}
-
-function fmtClock(iso) {
-  if (!iso) return '';
-  const d  = new Date(iso);
-  const wd = d.toLocaleDateString('de-DE', { weekday: 'short' }).replace('.', '');
-  const t  = d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-  return `${wd} ${t}`;
-}
-
-function fmtTime(ms) {
-  if (!ms) return '–';
-  const total  = Math.round(ms / 10);
-  const cents  = total % 100;
-  const secs   = Math.floor(total / 100) % 60;
-  const mins   = Math.floor(total / 6000);
-  return `${mins}:${String(secs).padStart(2,'0')}.${String(cents).padStart(2,'0')}`;
-}
-
-function fmtDelta(ms) {
-  if (!ms || ms <= 0) return '';
-  const total = Math.round(ms / 10);
-  const secs  = Math.floor(total / 100);
-  const cents = total % 100;
-  return `+${secs}.${String(cents).padStart(2,'0')}`;
-}
-</script>
 </body>
 </html>
