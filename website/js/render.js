@@ -90,17 +90,19 @@ function buildRaceCard(race, isOpen, entryMap) {
   const header = el("div", "race-header");
   header.addEventListener("click", () => toggleRace(race.id));
   header.innerHTML = `
-    <span class="race-number">${escapeHtml(String(race.number))}</span>
-    <span class="race-label">${escapeHtml(race.shortLabel || race.longLabel || "")}</span>
+  <span class="race-number">${escapeHtml(String(race.number))}</span>
+  <span class="race-label">${escapeHtml(race.shortLabel || race.longLabel || "")}</span>
+  <div class="race-meta-row">
     <span class="race-meta">
-      ${timeStr ? `<span class="race-starttime">${timeStr}</span>` : ""}
-      <span>${race.distance || "–"} m</span>
-      <span>${race.entryCount} Boote</span>
+      <span class="race-starttime">${timeStr || ""}</span>
+      <span class="race-distance">${race.distance || "–"} m</span>
+      <span class="race-boats">${race.entryCount} Boote</span>
       <span class="race-status ${status}">${statusLabel(status)}</span>
     </span>
     <svg class="race-chevron" width="16" height="16" viewBox="0 0 16 16">
       <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
     </svg>
+  </div>
   `;
   card.appendChild(header);
 
@@ -247,7 +249,12 @@ function athleteList(entry) {
 }
 
 function statusLabel(status) {
-  return { scheduled: "Geplant", running: "Laufend", finished: "Beendet" }[status] || status;
+  return {
+    scheduled: "Geplant",
+    running:   "Laufend",
+    im_ziel:   "Im Ziel",
+    finished:  "Offiziell",
+  }[status] || status;
 }
 
 function buildEntryMap(races) {

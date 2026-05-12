@@ -15,12 +15,9 @@ export function getRaceStatus(race) {
   const comps = race.competitions || [];
   if (comps.length === 0) return "scheduled";
 
-  const allOfficial = comps.every((c) => c.status === 4);
-  if (allOfficial) return "finished";
-
-  const anyActive = comps.some((c) => c.status === 2 || c.status === 3 || c.status === 5);
-  if (anyActive) return "running";
-
+  if (comps.every((c) => c.status === 4))                    return "finished";
+  if (comps.some((c) => c.status === 2))                     return "running";
+  if (comps.some((c) => c.status === 3 || c.status === 5))   return "im_ziel";
   return "scheduled";
 }
 
@@ -86,6 +83,12 @@ export function filterRaces(races, query, filter, activeDay = "all", activeSort 
 
 function normalizeQuery(query) {
   return query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+}
+
+function firstCompStart(race) {
+  for (const c of race.competitions || [])
+    if (c.scheduledStart) return c.scheduledStart;
+    return null;
 }
 
 function matchesRace(race, terms) {

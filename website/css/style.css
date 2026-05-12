@@ -264,6 +264,11 @@ a:hover { text-decoration: underline; }
   gap: 1rem;
 }
 
+.race-boats {
+  min-width: 4.25rem;
+  text-align: right;
+}
+
 .race-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -275,6 +280,11 @@ a:hover { text-decoration: underline; }
 
 .race-card:hover {
   box-shadow: var(--shadow-md);
+}
+
+.race-distance {
+  min-width: 3.75rem;
+  text-align: right;
 }
 
 .race-header {
@@ -313,6 +323,14 @@ a:hover { text-decoration: underline; }
   flex-shrink: 0;
 }
 
+.race-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
 .race-status {
   font-size: 0.7rem;
   font-weight: 600;
@@ -320,11 +338,14 @@ a:hover { text-decoration: underline; }
   letter-spacing: 0.04em;
   padding: 2px 8px;
   border-radius: 99px;
+  min-width: 5rem;
+  text-align: center;
 }
 
 .race-status.scheduled { color: var(--color-text-soft); background: var(--color-bg); }
 .race-status.running   { color: #fff; background: var(--color-accent); }
 .race-status.finished  { color: var(--color-success); background: #eaf5ef; }
+.race-status.im_ziel { background: #ede9fe; color: #6d28d9; }
 
 .race-chevron {
   color: var(--color-text-soft);
@@ -496,6 +517,9 @@ mark {
   .race-meta { width: 100%; }
   .filter-group { width: 100%; overflow-x: auto; }
   .boat-table .col-delta { display: none; }
+  .race-label      { flex: 1 1 calc(100% - 3rem); }
+  .race-meta-row   { flex: 1; justify-content: space-between; }
+  .race-meta-row .race-meta { flex: 1; }
 }
 
 /* ── Logo (Bild statt SVG) ─────────────────────────────────── */
@@ -511,6 +535,8 @@ mark {
   font-family: var(--font-mono);
   font-weight: 500;
   color: var(--color-text);
+  min-width: 5.5rem;
+  text-align: right;
 }
 
 /* ── Tag-Filter-Zeile ──────────────────────────────────────── */

@@ -195,6 +195,7 @@
     .status-pill.scheduled { background: #f1f5f9; color: #64748b; }
     .status-pill.running   { background: #fef3c7; color: #b45309; }
     .status-pill.finished  { background: #dcfce7; color: #15803d; }
+    .status-pill.im_ziel { background: #ede9fe; color: #6d28d9; }
 
     /* ── Comp block ──────────────────────────────────── */
     .comp-heading {
@@ -428,8 +429,9 @@ function nextUnstartedIdx() {
 function raceStatus(race) {
   const comps = race.competitions || [];
   if (!comps.length) return 'scheduled';
-  if (comps.every(c => c.status === 4)) return 'finished';
-  if (comps.some(c => c.status >= 2))   return 'running';
+  if (comps.every(c => c.status === 4))                  return 'finished';
+  if (comps.some(c => c.status === 2))                   return 'running';
+  if (comps.some(c => c.status === 3 || c.status === 5)) return 'im_ziel';
   return 'scheduled';
 }
 
@@ -476,8 +478,12 @@ function buildPanel(race, isRight) {
 
   const entryMap = new Map((race.entries || []).map(e => [e.id, e]));
   const status   = raceStatus(race);
-  const labels   = { scheduled: 'Geplant', running: 'Laufend', finished: 'Beendet' };
-
+  const labels = {
+    scheduled: 'Geplant',
+    running:   'Laufend',
+    im_ziel:   'Im Ziel',
+    finished:  'Offiziell'
+    };
   // ── Header ──
   const top = div('race-top');
   top.innerHTML = `
