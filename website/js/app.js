@@ -5,6 +5,7 @@ import { render } from "./render.js";
 const DATA_URL = "data/regatta.json";
 const REFRESH_INTERVAL_MS = 60_000;
 const SEARCH_DEBOUNCE_MS = 200;
+let refreshHandle = null;
 
 async function init() {
   subscribe(render);
@@ -12,7 +13,16 @@ async function init() {
   setupFilters();
   setupKeyboardShortcuts();
   await loadData();
-  setInterval(loadData, REFRESH_INTERVAL_MS);
+  refreshHandle = setInterval(loadData, REFRESH_INTERVAL_MS);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearInterval(refreshHandle);
+    } else {
+      loadData();
+      refreshHandle = setInterval(loadData, REFRESH_INTERVAL_MS);
+    }
+  });
 }
 
 async function loadData() {

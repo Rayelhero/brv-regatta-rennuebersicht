@@ -3,83 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WKR — Regatta</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>WKR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wkr.css">
+  <link rel="icon" href="../logo300_red.png">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'DM Sans', -apple-system, sans-serif;
-      background: #1a2236;
-      color: #fff;
-      height: 100dvh;
+    .landing {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 2rem;
+      flex: 1;
       padding: 2rem;
     }
 
-    .title {
-      font-size: 1rem;
-      font-weight: 500;
-      color: rgba(255,255,255,.4);
-      text-transform: uppercase;
+    .landing-title {
+      font-size: .75rem;
+      font-weight: 600;
       letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-soft);
     }
 
-    .cards {
+    .landing-cards {
       display: flex;
-      gap: 1.5rem;
+      gap: 1.25rem;
       flex-wrap: wrap;
       justify-content: center;
     }
 
-    a.card {
+    a.landing-card {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: .75rem;
-      width: 200px;
-      padding: 2rem 1.5rem;
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 16px;
+      gap: .5rem;
+      width: 220px;
+      padding: 1.75rem 1.5rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
       text-decoration: none;
-      color: #fff;
-      transition: background .15s, transform .12s;
+      color: var(--text);
+      transition: box-shadow .15s, transform .12s;
+      border-left: 4px solid transparent;
     }
 
-    a.card:hover {
-      background: rgba(255,255,255,.13);
+    a.landing-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,.08);
       transform: translateY(-2px);
     }
 
-    .card-icon { font-size: 2.5rem; }
-    .card-label { font-size: 1.25rem; font-weight: 700; }
+    a.landing-card.start { border-left-color: var(--accent); }
+    a.landing-card.ziel  { border-left-color: var(--warning); }
+
+    .card-label {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
     .card-desc {
-      font-size: .8rem;
-      color: rgba(255,255,255,.45);
-      text-align: center;
-      line-height: 1.4;
+      font-size: .82rem;
+      color: var(--text-soft);
+      line-height: 1.45;
     }
   </style>
 </head>
 <body>
-  <p class="title">Wettkampfrichter</p>
-  <div class="cards">
-    <a class="card" href="start/">
-      <span class="card-icon">🚣</span>
-      <span class="card-label">Start</span>
-      <span class="card-desc">Nächstes und übernächstes ungeplantes Rennen</span>
-    </a>
-    <a class="card" href="ziel/">
-      <span class="card-icon">🏁</span>
-      <span class="card-label">Ziel</span>
-      <span class="card-desc">Letztes gestartetes und nächstes ungeplantes Rennen</span>
-    </a>
+<div class="app">
+
+  <nav class="toolbar">
+    <span class="toolbar-title">Wettkampfrichter</span>
+    <span class="spacer"></span>
+    <span class="sync-dot" id="sync-dot"></span>
+    <span class="sync-label" id="sync-label">–</span>
+  </nav>
+
+  <div class="landing">
+    <p class="landing-title">Ansicht wählen</p>
+    <div class="landing-cards">
+      <a class="landing-card start" href="start/">
+        <span class="card-label">Start</span>
+        <span class="card-desc">Nächstes und übernächstes ungeplantes Rennen</span>
+      </a>
+      <a class="landing-card ziel" href="ziel/">
+        <span class="card-label">Ziel</span>
+        <span class="card-desc">Letztes gestartetes und nächstes ungeplantes Rennen</span>
+      </a>
+    </div>
   </div>
+
+</div>
+<script>
+  async function loadSync() {
+    try {
+      const res = await fetch('../data/status.json?t=' + Date.now());
+      if (!res.ok) return;
+      const status = await res.json();
+      const dot   = document.getElementById('sync-dot');
+      const label = document.getElementById('sync-label');
+      const ts    = status.timestamp;
+      const mins  = ts ? Math.floor((Date.now() - new Date(ts).getTime()) / 60_000) : null;
+      dot.className    = 'sync-dot' + (mins === null || mins > 3 ? ' stale' : '');
+      label.textContent = mins === null ? '–' : mins === 0 ? 'gerade eben' : `vor ${mins} min`;
+    } catch {}
+  }
+  loadSync();
+  setInterval(loadSync, 30_000);
+</script>
 </body>
 </html>
