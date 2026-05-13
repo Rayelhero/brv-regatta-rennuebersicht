@@ -44,7 +44,7 @@
         <input
           type="search"
           id="search-input"
-          placeholder="Rennen, Verein oder Startnummer suchen…"
+          placeholder="Namen, Rennen oder Verein suchen…"
           autocomplete="off"
         >
         <kbd class="search-hint" id="search-hint">/</kbd>
@@ -52,14 +52,12 @@
       <div class="filter-group">
         <button class="filter-btn active" data-filter="all">Alle</button>
         <button class="filter-btn" data-filter="scheduled">Geplant</button>
-        <button class="filter-btn" data-filter="running">Laufend</button>
         <button class="filter-btn" data-filter="im_ziel">Im Ziel</button>
         <button class="filter-btn" data-filter="finished">Offiziell</button>
       </div>
         <div class="sort-group">
-        <button class="filter-btn sort-btn active" data-sort="number">Nr.</button>
-        <button class="filter-btn sort-btn" data-sort="time">Zeit</button>
-      </div>
+          <button class="filter-btn" id="btn-scroll-current">⏱ Aktuell</button>
+        </div>
     <!-- Tag-Filter (nur sichtbar wenn Regatta > 1 Tag) -->
     <div class="toolbar-inner day-toolbar" id="day-filter-group" hidden></div>
   </nav>

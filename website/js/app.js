@@ -1,6 +1,7 @@
 import { subscribe, update, getState } from "./state.js";
-import { filterRaces, getRegattaDays } from "./search.js";
+import { filterRaces, getRegattaDays, getRaceStatus } from "./search.js";
 import { render } from "./render.js";
+
 
 const DATA_URL = "data/regatta.json";
 const REFRESH_INTERVAL_MS = 60_000;
@@ -113,18 +114,7 @@ function setupFilters() {
     applyFilters(getState().searchQuery, btn.dataset.filter, getState().activeDay)
     );
   });
-
-  // Sortierung (Nr., Zeit)
-  document.querySelectorAll(".sort-btn").forEach((btn) => {
-    btn.addEventListener("click", () =>
-    applyFilters(
-      getState().searchQuery,
-                 getState().activeFilter,
-                 getState().activeDay,
-                 btn.dataset.sort
-    )
-    );
-  });
+  document.getElementById('btn-scroll-current').addEventListener('click', scrollToCurrent);
 }
 function applyFilters(query, filter, activeDay = "all", activeSort = getState().activeSort) {
   const state = getState();
@@ -151,6 +141,19 @@ function setupKeyboardShortcuts() {
       document.getElementById("search-input").focus();
     }
   });
+}
+
+function scrollToCurrent() {
+  const { visibleRaces } = getState();
+  if (!visibleRaces?.length) return;
+
+  const current =
+  visibleRaces.find(r => ['running', 'im_ziel'].includes(getRaceStatus(r))) ||
+  visibleRaces.find(r => getRaceStatus(r) === 'scheduled');
+
+  if (!current) return;
+  document.querySelector(`[data-race-id="${current.id}"]`)
+  ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 init().catch((err) => console.error("[app] Init fehlgeschlagen:", err));

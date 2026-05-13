@@ -1,7 +1,7 @@
 const listeners = new Set();
 
 const state = {
-  activeSort: 'number',  // 'number' | 'time'
+  activeSort: 'time',  // 'number' | 'time'
   status: "loading",
   errorMessage: null,
   regatta: null,
